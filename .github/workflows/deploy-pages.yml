@@ -26,7 +26,8 @@ jobs:
       - name: Prepare static site
         run: |
           mkdir -p _site
-          cp index.html favicon.svg _site/
+          cp index.html admin.html config.js favicon.svg _site/
+          cp -R assets _site/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

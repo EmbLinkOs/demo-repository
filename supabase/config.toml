@@ -1,0 +1,5 @@
+project_id = "polytech-dijon-graduation"
+
+[functions.reservations]
+# Public registration uses Turnstile; organizer actions verify the user JWT in code.
+verify_jwt = false

@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Organisation — Polytech Dijon · 2027</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./assets/styles.css" />
+    <script src="./config.js" defer></script>
+    <script src="./assets/admin.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#main" data-en="Skip to content">Aller au contenu</a>
+    <header class="admin-header wrap">
+      <a class="brand" href="./index.html"
+        ><span class="brand-mark" aria-hidden="true">p<span>.</span></span
+        ><span
+          >polytech dijon<small data-en="Student organizing team"
+            >Équipe étudiante organisatrice</small
+          ></span
+        ></a
+      >
+      <div>
+        <button id="language" class="language" aria-label="Switch to English">
+          FR / EN</button
+        ><button
+          id="logout"
+          class="button outline small"
+          hidden
+          data-en="Sign out"
+        >
+          Déconnexion
+        </button>
+      </div>
+    </header>
+    <main id="main" class="admin-main wrap">
+      <p class="eyebrow" data-en="BEHIND THE CELEBRATION">DANS LES COULISSES</p>
+      <h1>
+        <span data-en="One day.">Un jour.</span><br /><em
+          data-en="Every detail counts."
+          >Chaque détail compte.</em
+        >
+      </h1>
+      <p
+        class="admin-intro"
+        data-en="Manage the ceremony, reservations and invitations. Access is restricted to organizers authorized in Supabase."
+      >
+        Gérez la cérémonie, les réservations et les invitations. L'accès est
+        réservé aux organisateurs autorisés dans Supabase.
+      </p>
+      <div
+        id="admin-message"
+        class="admin-message"
+        role="status"
+        aria-live="polite"
+      ></div>
+      <section id="login-panel" class="admin-panel">
+        <h2 data-en="Organizer sign-in">Connexion organisateur</h2>
+        <p
+          class="admin-hint"
+          id="setup-notice"
+          data-en="The database is not connected yet. Follow SETUP.md in the repository to activate this workspace. No guest details are stored by this page."
+        >
+          La base de données n'est pas encore connectée. Suivez SETUP.md dans le
+          dépôt pour activer cet espace. Cette page ne stocke aucune coordonnée
+          de visiteur.
+        </p>
+        <form id="login-form">
+          <label for="admin-email" data-en="Email">Email</label
+          ><input
+            id="admin-email"
+            name="email"
+            type="email"
+            autocomplete="username"
+            required
+          /><label for="admin-password" data-en="Password">Mot de passe</label
+          ><input
+            id="admin-password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required
+          /><button
+            id="login-button"
+            class="button green"
+            type="submit"
+            disabled
+            data-en="Sign in"
+          >
+            Se connecter
+          </button>
+        </form>
+      </section>
+      <div id="workspace" hidden>
+        <div class="admin-stats">
+          <div class="admin-stat">
+            <strong id="reserved-count">—</strong
+            ><span data-en="Reserved places">Places réservées</span>
+          </div>
+          <div class="admin-stat">
+            <strong id="remaining-count">—</strong
+            ><span data-en="Places still available">Places disponibles</span>
+          </div>
+          <div class="admin-stat">
+            <strong id="checked-count">—</strong
+            ><span data-en="People checked in">Personnes accueillies</span>
+          </div>
+        </div>
+        <details class="admin-panel">
+          <summary data-en="Event settings and registration opening">
+            Paramètres de la cérémonie et ouverture des inscriptions
+          </summary>
+          <p
+            class="admin-hint"
+            data-en="Opening requires a valid date, capacity, venue, organizer email, privacy notices in both languages and a retention deadline. Test email delivery first."
+          >
+            L'ouverture exige une date valide, une capacité, un lieu, un email
+            organisateur, les deux notices de confidentialité et une date limite
+            de conservation. Testez d'abord l'envoi des emails.
+          </p>
+          <form id="event-form" class="admin-event-form">
+            <div>
+              <label for="event-date" data-en="Event date"
+                >Date de la cérémonie</label
+              ><input id="event-date" name="event_date" type="date" required />
+            </div>
+            <div>
+              <label for="event-time" data-en="Time in Dijon (optional)"
+                >Heure à Dijon (facultatif)</label
+              ><input id="event-time" name="event_time" type="time" />
+            </div>
+            <div>
+              <label for="capacity" data-en="Total guest capacity"
+                >Capacité totale d'accueil</label
+              ><input
+                id="capacity"
+                name="capacity"
+                type="number"
+                min="1"
+                max="100000"
+              />
+            </div>
+            <div>
+              <label for="max-party" data-en="Maximum people per reservation"
+                >Personnes maximum par réservation</label
+              ><input
+                id="max-party"
+                name="max_party_size"
+                type="number"
+                min="1"
+                max="20"
+                required
+              />
+            </div>
+            <div>
+              <label for="venue" data-en="Venue">Lieu</label
+              ><input id="venue" name="venue" maxlength="200" />
+            </div>
+            <div>
+              <label for="venue-address" data-en="Address">Adresse</label
+              ><input id="venue-address" name="venue_address" maxlength="500" />
+            </div>
+            <div>
+              <label for="organizer-email" data-en="Organizer contact email"
+                >Email de contact de l'organisation</label
+              ><input
+                id="organizer-email"
+                name="organizer_email"
+                type="email"
+                maxlength="254"
+              />
+            </div>
+            <div>
+              <label
+                for="retention"
+                data-en="Delete guest data after (maximum one year after the event)"
+                >Supprimer les données après (maximum un an après la
+                cérémonie)</label
+              ><input id="retention" name="retention_until" type="date" />
+            </div>
+            <div>
+              <label for="privacy-fr"
+                >Notice de confidentialité (français)</label
+              ><textarea
+                id="privacy-fr"
+                name="privacy_notice_fr"
+                maxlength="8000"
+              ></textarea>
+            </div>
+            <div>
+              <label for="privacy-en">Privacy notice (English)</label
+              ><textarea
+                id="privacy-en"
+                name="privacy_notice_en"
+                maxlength="8000"
+              ></textarea>
+            </div>
+            <label class="checkbox-label"
+              ><input name="registration_open" type="checkbox" /><span
+                data-en="Open registration"
+                >Ouvrir les inscriptions</span
+              ></label
+            ><button class="button green" type="submit" data-en="Save settings">
+              Enregistrer les paramètres
+            </button>
+          </form>
+        </details>
+        <div class="admin-toolbar">
+          <h2 data-en="The guest list">La liste des invités</h2>
+          <div>
+            <button class="button outline small" id="refresh" data-en="Refresh">
+              Actualiser</button
+            ><button
+              class="button green small"
+              id="export"
+              data-en="Export CSV"
+            >
+              Exporter CSV
+            </button>
+          </div>
+        </div>
+        <div class="field admin-search">
+          <label for="search" data-en="Search by name, email or reference"
+            >Rechercher par nom, email ou référence</label
+          ><input
+            id="search"
+            type="search"
+            placeholder="PD27-…"
+            style="color: #153e35; border-color: #a6b2a0; max-width: 500px"
+          />
+        </div>
+        <p
+          class="admin-hint"
+          data-en="Only authorized organizers can see these details. CSV exports contain personal data: keep them secure and delete them by the retention deadline."
+        >
+          Seuls les organisateurs autorisés voient ces informations. Les exports
+          CSV contiennent des données personnelles : conservez-les en sécurité
+          et supprimez-les à l'échéance prévue.
+        </p>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th data-en="Guest">Invité</th>
+                <th data-en="Contact">Contact</th>
+                <th data-en="People">Places</th>
+                <th data-en="Reservation">Réservation</th>
+                <th data-en="Invitation">Invitation</th>
+                <th data-en="Actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="reservations"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+name: Registration checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  registration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Check browser scripts and Edge Function
+        run: |
+          node --check assets/app.js
+          node --check assets/admin.js
+          deno check supabase/functions/reservations/index.ts
+      - name: Validate registration and invitation handling
+        run: deno test --allow-env tests/core_test.ts tests/handler_test.ts
+      - name: Test reservation database in isolation
+        run: |
+          docker run --detach --rm --name polytech-db-check -e POSTGRES_HOST_AUTH_METHOD=trust postgres:17-alpine
+          for attempt in $(seq 1 30); do
+            if docker exec polytech-db-check pg_isready -U postgres; then break; fi
+            sleep 1
+          done
+          docker exec polytech-db-check pg_isready -U postgres
+          python3 tests/database.py
+      - name: Stop test database
+        if: always()
+        run: docker stop polytech-db-check || true
