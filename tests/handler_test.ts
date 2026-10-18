@@ -10,7 +10,7 @@ for (const [key, value] of Object.entries({
 }))
   Deno.env.set(key, value);
 const { handleRequest } = await import(
-  "../supabase/functions/reservations/index.ts"
+  "../supabase/functions/reservations/handler.ts"
 );
 const assert = (value: boolean, message: string) => {
   if (!value) throw new Error(message);
